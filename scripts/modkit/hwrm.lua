@@ -283,11 +283,18 @@ if (nil) then
 	end
 
 	--- in progress...
-	---@param player_index any
-	---@param group_name any
-	---@param target_selection any
-	---@param attack any
+	---@param player_index integer
+	---@param group_name string
+	---@param target_selection string
+	---@param attack '0'|'1'
 	function SobGroup_AttackSelection(player_index, group_name, target_selection, attack)
+	end
+
+	--- Clears the target `group_name` of any ships, if it exists.
+	---
+	---@param group_name string
+	---@return nil
+	function SobGroup_Clear(group_name)
 	end
 
 	--- Causes all ships in `group_name` to attack any subsystems mounted to `hardpoint_name` in `target_group`.
@@ -406,12 +413,57 @@ if (nil) then
 	function SobGroup_Count(group_name)
 	end
 
-	--- === Selection stuff (NEEDS TESTING, USED ONLY BY DEFENSE FIGHTER CUSTOM CODE) ===
+	--- Returns the number of ships contained in `group_name` which are owned by player `player_index`.
+	---
+	---@param group_name string
+	---@param player_index integer
+	---@return integer
+	function SobGroup_CountByPlayer(group_name, player_index)
+	end
+
+	--- === Selection stuff (NEEDS TESTING; USED ONLY BY DEFENSE FIGHTER CUSTOM CODE) ===
 
 	--- Creates a new selection `selection_name`.
 	---@param selection_name string
 	---@return nil
 	function Selection_Create(selection_name)
+	end
+
+	--- Gets all current universe missiles, and adds them to the selection `selection_name`.
+	---
+	--- Returns the number of selected missiles.
+	---
+	---@param selection_name string
+	---@return integer
+	function Selection_GetMissiles(selection_name)
+	end
+
+	--- Fills `target_selection` with all entities in `source_selection` which _pass_ the `filter_type` for `value_1`, and optionally `value_2`.
+	--- Whether a second value is required depends on `filter_type`. **If a second value is not required, pass an empty string (the param is not optional).**
+	---
+	--- Returns the number of filtered ships.
+	---
+	---@param target_selection string
+	---@param source_selection string
+	---@param filter_type string
+	---@param value_1 any
+	---@param value_2 any
+	---@return integer
+	function Selection_FilterInclude(target_selection, source_selection, filter_type, value_1, value_2)
+	end
+
+	--- Fills `target_selection` with any entities in `source_selection` which do NOT pass the `filter_type` for `value_1`, and optionally `value_2`.
+	--- Whether a second value is required depends on `filter_type`. **If a second value is not required, pass an empty string (the param is not optional).**
+	---
+	--- Returns the number of filtered ships.
+	---
+	---@param target_selection string
+	---@param source_selection string
+	---@param filter_type string
+	---@param value_1 any
+	---@param value_2 any
+	---@return integer
+	function Selection_FilterExclude(target_selection, source_selection, filter_type, value_1, value_2)
 	end
 
 	--- Spawn stuff
