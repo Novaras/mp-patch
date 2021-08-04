@@ -1,13 +1,6 @@
 dofilepath("data:scripts/modkit/player.lua"); -- stuff for players like GLOBAL_PLAYERS
 dofilepath("data:scripts/modkit/research.lua"); -- research...
 
----@class Vec3
----@field [1] number
----@field [2] number
----@field [3] number
-
----@class Position : Vec3
-
 ---@class Attribs
 ---@field id integer
 ---@field type_group string,

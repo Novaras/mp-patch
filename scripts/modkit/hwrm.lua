@@ -6,6 +6,13 @@ if (nil) then
 
 	---@alias bool '1'|'nil'
 
+	---@class Vec3
+	---@field [1] number
+	---@field [2] number
+	---@field [3] number
+
+	---@class Position : Vec3
+
 	AB_None = 0;
 	AB_Move = 1;
 	AB_Attack = 2;
@@ -283,13 +290,6 @@ if (nil) then
 	function SobGroup_AttackSelection(player_index, group_name, target_selection, attack)
 	end
 
-	--- Clears the target `group_name` of any ships, if it exists.
-	---
-	---@param group_name string
-	---@return nil
-	function SobGroup_Clear(group_name)
-	end
-
 	--- Causes all ships in `group_name` to attack any subsystems mounted to `hardpoint_name` in `target_group`.
 	---
 	---@param group_name string
@@ -315,11 +315,103 @@ if (nil) then
 	function SobGroup_ManualEngineGlow(group_name, thrust_value)
 	end
 
-	--- Selection stuff (NEEDS TESTING, USED ONLY BY DEFENSE FIGHTER CUSTOM CODE):
+	--- Allows ships in `group_to_set` to ignore collisions with ships in `group_to_ignore`. Does not appear to override `SuperPriority` collision family.
+	---
+	---@param group_to_set string
+	---@param group_to_ignore string
+	---@return nil
+	function SobGroup_AvoidanceIgnore(group_to_set, group_to_ignore)
+	end
+
+	--- Checks whether any ships in `group_name` can perform the ability `ability_code` (which is one of the `AB_` codes).
+	---
+	---@param group_name string
+	---@param ability_code integer
+	---@return '1'|'0'
+	function SobGroup_CanDoAbility(group_name, ability_code)
+	end
+
+	--- Causes any capture-capable ships in `capturing_group` to begin trying to capture ships in `target_group`.
+	---
+	---@param capturing_group string
+	---@param target_group string
+	---@return nil
+	function SobGroup_CaptureSobGroup(capturing_group, target_group)
+	end
+
+	--- Enables or disables any weapons mounted on the joint `joint_name` for all ships in `group_name` (hardpoints are mounted on joints).
+	---
+	---@param group_name string
+	---@param joint_name string
+	---@param enabled '1'|'0'
+	---@return nil
+	function SobGroup_ChangePower(group_name, joint_name, enabled)
+	end	
+
+	--- Clears the target `group_name` of any ships, if it exists.
+	---
+	---@param group_name string
+	---@return nil
+	function SobGroup_Clear(group_name)
+	end
+
+	--- === Script flags (probably just a state management thing?) ===
+
+	--- TODO
+	function SobGroup_ClearScriptFlag()
+	end
+
+	--- TODO
+	function SobGroup_SetScriptFlag()
+	end
+
+	--- TODO
+	function SobGroup_CountByScriptFlag()
+	end
+
+	--- Clears any _tumble_ previously set by `SobGroup_SetTumble`.
+	---
+	---@param group_name string
+	---@return nil
+	function SobGroup_ClearTumble(group_name)
+	end
+
+	--- Causes ships in `group_name` to _tumble_, meaning their pitch/yaw/roll values are forcibly altered.
+	---
+	--- Note that high values will cause the ships to spin very quickly, in which case they won't be able to move at all.
+	---
+	---@param group_name string
+	---@param tumble_vec Vec3
+	function SobGroup_Tumble(group_name, tumble_vec)
+	end
+
+	--- TODO
+	function SobGroup_CloakToggle(group_name)
+	end
+
+	--- Fills target_group with all ships in `original_group` (copying it). Both groups must exist before being passed to this function.
+	---
+	--- Note that although this function is similar to `SobGroup_SobGroupAdd`, `SobGroup_Copy` will overwrite the contents of target_group instead of just adding to it.
+	---
+	---@param target_group string
+	---@param original_group string
+	---@return nil
+	function SobGroup_Copy(target_group, original_group)
+	end
+
+	--- Returns the number of ships contained by `group_name`.
+	---
+	---@param group_name string
+	---@return integer
+	function SobGroup_Count(group_name)
+	end
+
+	--- === Selection stuff (NEEDS TESTING, USED ONLY BY DEFENSE FIGHTER CUSTOM CODE) ===
 
 	--- Creates a new selection `selection_name`.
 	---@param selection_name string
-	function SobGroup_CreateSelection(selection_name)
+	---@return nil
+	function Selection_Create(selection_name)
 	end
 
 	--- Spawn stuff
