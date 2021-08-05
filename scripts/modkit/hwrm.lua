@@ -392,7 +392,10 @@ if (nil) then
 	function SobGroup_Tumble(group_name, tumble_vec)
 	end
 
-	--- TODO
+	--- Causes ships in `group_name` to toggle their cloak ability, if they have it.
+	---
+	---@param group_name string
+	---@return nil
 	function SobGroup_CloakToggle(group_name)
 	end
 
@@ -419,6 +422,40 @@ if (nil) then
 	---@param player_index integer
 	---@return integer
 	function SobGroup_CountByPlayer(group_name, player_index)
+	end
+
+	--- Creates a new Sobgroup if it does not already exist.
+	---
+	---@param group_name string
+	---@return nil
+	function SobGroup_Create(group_name)
+	end
+
+	--- Creates a new Sobgroup if it does not already exist. Identical to `SobGroup_Create`.
+	---
+	---@param group_name string
+	---@return nil
+	function SobGroup_CreateIfNotExist(group_name)
+	end
+
+	--- Creates a new _squad_ of `new_ship_type`, which will initially appear in the shiphold of the first ship with a shiphold in `builder_group`.
+	--- If `builder_group` has no shipholds, the game will crash. Some ships will hyperspace in or instantly spawn in their parade position. Ships only
+	--- instantly spawn if the spawner ship's shiphold cannot accomodate the ship type being spawned.
+	---
+	---@param builder_group string
+	---@param new_ship_type string
+	---@return nil
+	function SobGroup_CreateShip(builder_group, new_ship_type)
+	end
+
+	--- Creates hardpoint `hardpoint_type` on all ships in `target_group` which are capable of hosting it.
+	---
+	--- Can be either the full name of a subsystem, or the generic type of the subsystem (as defined with `NewSubSystemType.typeString`).
+	---
+	---@param target_group string
+	---@param hardpoint_type string
+	---@return nil
+	function SobGroup_CreateSubSystem(target_group, hardpoint_type)
 	end
 
 	--- === Selection stuff (NEEDS TESTING; USED ONLY BY DEFENSE FIGHTER CUSTOM CODE) ===
