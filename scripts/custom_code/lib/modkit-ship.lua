@@ -7,6 +7,7 @@
 ---@field _reposition_volume string
 ---@field _default_vol string
 ---@field _auto_launch '0'|'1'
+---@field _visibility table<Player, Visibility>
 
 ---@class Ship : Base, ShipAttribs
 modkit_ship = {
@@ -23,7 +24,10 @@ modkit_ship = {
 			_despawned_at_volume = "despawn-vol-" .. s,
 			_reposition_volume = "reposition-vol-" .. s,
 			_default_vol = "vol-default-" .. s,
-			_auto_launch = 1
+			_auto_launch = 1,
+			_visibility = {
+				default = VisNone
+			}
 		};
 	end,
 };
@@ -591,6 +595,33 @@ end
 
 function modkit_ship:madState(animation_name)
 	SobGroup_SetMadState(self.own_group, animation_name);
+end
+
+-- === Visibility ===
+
+--- Returns (and optionally sets) the inherant visibility of this ship. If no player is specified, then this function sets the 'default' visibility of
+--- this ship for _all_ players. If a player _is_ specified, then this 'specific' value for this player overrides any defaults.
+---
+--- - `specific_player` is either a player index or `"default"` (if `nil`, becomes `"default"`), which is applied as a base value which can be overridden by specific indexed values.
+--- - `visibility` is an integer in the range `0 - 2`, aliased by the global varaibels `VisNone`, `VisSecondary`, and `VisFull`.
+---
+---@param visibility Visibility
+---@param specific_player string|integer
+---@return Visibility
+function modkit_ship:visibility(visibility, specific_player)
+	specific_player = specific_player or "default";
+	-- here we set player <-> visibility:
+	if (visibility) then
+		self._visibility[specific_player] = visibility;
+	end
+
+	-- for each player, allow them to see this ship according to their specific rules, or the 'default' rule if no specific rules have been specified:
+	for _, player in GLOBAL_PLAYERS:all() do
+		local visibility = self._visibility[player.id] or self._visibility["default"];
+		SobGroup_SetInherentVisibility(self.own_group, player.id, visibility);
+	end
+
+	return self._visibility[specific_player];
 end
 
 -- === Spawning ===
