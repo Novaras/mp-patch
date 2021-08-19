@@ -250,6 +250,7 @@ end
 -- === hooks ===
 
 function drones_proto:update()
+	print(self.own_group .. ":update begin");
 	if (self:tick() >= 3) then -- some time to undock
 		self:init();
 
@@ -262,15 +263,18 @@ function drones_proto:update()
 		end
 		--print("main run end: " .. Universe_GameTime());
 	end
+	print(self.own_group .. ":update end");
 end
 
 function drones_proto:destroy()
+	print(self.own_group .. ":destroy begin");
 	modkit.scheduler:clear(self.repopulate_event_id);
 	modkit.scheduler:clear(self.collate_event_id);
 
 	for _, drone in self.live_drones do
 		drone:HP(0);
 	end
+	print(self.own_group .. ":destroy end");
 end
 
 -- function drones_proto:start()
