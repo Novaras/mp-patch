@@ -108,6 +108,7 @@ NewShipType.nlipsFarRange=0
 NewShipType.SMRepresentation="Mesh"
 NewShipType.meshRenderLimit=40000
 NewShipType.dotRenderLimit=10
+NewShipType.AlwaysInRenderList = 1
 NewShipType.visibleInSecondary=1
 NewShipType.goblinsStartFade=5000
 NewShipType.goblinsOff=5000
@@ -192,3 +193,5 @@ NewShipType.maxFalloffForce=500*10
 NewShipType.explosiveDamageOnDeath=745
 NewShipType.radiusDamageEvadeMod=1.1
 NewShipType.canSurround=1
+
+addCustomCode(NewShipType, "data:scripts/driver.lua", "load", "create", "update", "destroy", "mpp_dreadnaught", 1);
