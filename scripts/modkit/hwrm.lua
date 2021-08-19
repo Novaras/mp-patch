@@ -57,6 +57,12 @@ if (nil) then
 	COMMAND_Retire = 16;
 	-- ...todo
 
+	VisNone = 0;
+	VisSecondary = 1;
+	VisFull = 2;
+
+	---@alias Visibility 'VisNone'|'VisSecondary'|'VisFull'
+
 	OffensiveROE = 0;
 	DefensiveROE = 1;
 	PassiveROE = 2;
@@ -336,6 +342,17 @@ if (nil) then
 	---@param volume_name string
 	---@return nil
 	function SobGroup_SpawnNewShipInSobGroup(player_index, ship_type, new_squad_name, target_group, volume_name)
+	end
+
+	--- Sets the _inherent_ visibility of the `target_group` for player `target_player`.
+	---
+	--- Note: there is no corresponding getter for this value, so you should store it yourself if you need to get it later.
+	---
+	---@param target_group string
+	---@param target_player integer
+	---@param visibility Visibility
+	---@return nil
+	function SobGroup_SetInherentVisibility(target_group, target_player, visibility)
 	end
 
 	--- Selection stuff (NEEDS TESTING, USED ONLY BY DEFENSE FIGHTER CUSTOM CODE):
