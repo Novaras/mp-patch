@@ -298,6 +298,25 @@ if (nil) then
 	function SobGroup_AttackSelection(player_index, group_name, target_selection, attack)
 	end
 
+	--- Makes ships with capture ability in `group_name` begin capturing viable ships in `target_group`.
+	---
+	---@param group_name string
+	---@param target_group string
+	function SobGroup_CaptureSobGroup(group_name, target_group)
+	end
+
+	--- Makes ships with salvage ability in `group_name` begin salvaging viabel ships in `target_group`.
+	---
+	---@param group_name string
+	---@param target_group string
+	function SobGroup_SalvageSobGroup(group_name, target_group)
+	end
+
+	---comment
+	---@param group_name any
+	function SobGroup_GetTechHarvestedAmount(group_name)
+	end
+
 	--- Clears the target `group_name` of any ships, if it exists.
 	---
 	---@param group_name string
