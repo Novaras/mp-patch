@@ -189,6 +189,36 @@ function modkit_ship:attackPlayer(player)
 	return SobGroup_AttackPlayer(self.own_group, player.id);
 end
 
+--- Causes this ship to begin capturing `targets`, which can be a single ship or a table of ships.
+---
+---@param targets Ship | Ship[]
+function modkit_ship:capture(targets)
+	if (targets.own_group) then
+		SobGroup_CaptureSobGroup(self.own_group, targets.own_group);
+	else
+		local temp_group = SobGroup_FromShips(self.own_group .. "-temp-capture-group", targets);
+		SobGroup_CaptureSobGroup(self.own_group, temp_group);
+	end
+end
+
+--- Causes this ship to begin salvaging `targets`, which can be a single ship or a table of ships.
+---
+---@param targets Ship | Ship[]
+function modkit_ship:salvage(targets)
+	if (targets.own_group) then
+		SobGroup_SalvageSobGroup(self.own_group, targets.own_group);
+	else
+		local temp_group = SobGroup_FromShips(self.own_group .. "-temp-salvage-group", targets);
+		SobGroup_SalvageSobGroup(self.own_group, temp_group);
+	end
+end
+
+--- Makes the ship stop (issues a stop command).
+---
+function modkit_ship:stop()
+	SobGroup_Stop(self.player.id, self.own_group);
+end
+
 function modkit_ship:move(where)
 	if (type(where) == "string") then -- a volume
 		SobGroup_Move(self.player.id, self.own_group, where);
@@ -458,7 +488,7 @@ end
 
 --- Returns `1` if this ship is attacking anything, else `nil`. If `target` is provided, check instead if
 -- this ship is attacking that target (instead of anything).
----@param target Ship
+---@param target Ship | 'nil'
 ---@return bool
 function modkit_ship:attacking(target)
 	if (target) then
@@ -468,6 +498,18 @@ function modkit_ship:attacking(target)
 	else
 		return SobGroup_AnyAreAttacking(self.own_group) == 1;
 	end
+end
+
+--- Returns whether or not this ship is currently capturing anything, or just the specified `target` if supplied.
+---@param target Ship | 'nil'
+---@return bool
+function modkit_ship:capturing(target)
+	if (target) then
+		local capturing_group = SobGroup_Fresh("capturing-group-" .. self.id);
+		SobGroup_GetSobGroupCapturingGroup(target.own_group, capturing_group);
+		return SobGroup_GroupInGroup(capturing_group, self.own_group) == 1;
+	end
+	return self:isDoingAbility(AB_Capture);
 end
 
 --- Returns all guard targets for this ship (or nil). If `target` is provided, returns whether or not this ship is guarding the `target`.
@@ -484,6 +526,14 @@ function modkit_ship:guarding(target)
 	end
 end
 
+--- Returns whether the players owning this ship and the `other` ship are allied.
+---
+---@param other Ship
+---@return bool
+function modkit_ship:alliedWith(other)
+	return self.player:alliedWith(other.player);
+end
+
 --- Returns `1` if this ship is under attack from any source, else `nil`. If `attacker` is provided, check instead if
 --- this ship is under attack by that attacker (instead of anything).
 ---
@@ -496,6 +546,10 @@ function modkit_ship:underAttack(attacker)
 	return SobGroup_UnderAttack(self.own_group) == 1;
 end
 
+--- Returns the command targets of the
+---@param command integer
+---@param source table
+---@return table
 function modkit_ship:commandTargets(command, source)
 	local targets_group = SobGroup_Fresh("targets-group-" .. self.id .. "-" .. command);
 	SobGroup_GetCommandTargets(targets_group, self.own_group, command);
