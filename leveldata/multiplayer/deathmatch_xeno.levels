@@ -12,7 +12,7 @@ LevelList = {
 	{
 		Tags = "8p",
 		Name = "Remnant",
-		Desc = "Remnant",
+		Desc = "Spectators 4P Xeno - Remnant",
 		MaxPlayers = 8,
 	},
 
