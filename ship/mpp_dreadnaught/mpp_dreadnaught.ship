@@ -147,22 +147,24 @@ addAbility(NewShipType,"WaypointMove");
 addAbility(NewShipType,"HyperSpaceCommand",0,2,500,1000,0,3);
 addAbility(NewShipType,"CanAttack",1,1,0,0,0.35,1.2,"BigCapitalShip, SmallCapitalShip, Capturer, Frigate, SubSystem, Mothership, Corvette, Fighter, Utility","Frontal",{Fighter="MoveToTargetAndShoot"},{Corvette="MoveToTargetAndShoot"},{Frigate="MoveToTargetAndShoot"},{Munition="MoveToTargetAndShoot"},{SubSystem="FrontalVsSubSystem"});
 addAbility(NewShipType,"GuardCommand",74,3000,1400);
-addAbility(NewShipType,"CanBeCaptured",160,0.5);
-addAbility(NewShipType,"CanBeSalvageCaptured",0,1,0,0,1,"SalCap");
+
+addAbility(NewShipType,"CanBeCaptured",			     100, 1, "SalCap");
+-- addAbility(NewShipType,"CanHaveTechHarvested","FighterDrive", 1, 100);
+
 addAbility(NewShipType,"CanBeRepaired");
 NewShipType.noCombatGrouping=1
 LoadModel(NewShipType,1);
 StartShipWeaponConfig(NewShipType,"Hgn_DreadnaughtIonCannon","Weapon_Triton1","Weapon_Triton1");
-StartShipWeaponConfig(NewShipType,"Hgn_DreadnaughtAutogun","Weapon_HullDefense1","Weapon_HullDefense1");
-StartShipWeaponConfig(NewShipType,"Hgn_DreadnaughtAutogun","Weapon_HullDefense2","Weapon_HullDefense2");
-StartShipWeaponConfig(NewShipType,"Hgn_DreadnaughtAutogun","Weapon_HullDefense3","Weapon_HullDefense3");
-StartShipWeaponConfig(NewShipType,"Hgn_DreadnaughtAutogun","Weapon_HullDefense4","Weapon_HullDefense4");
-StartShipWeaponConfig(NewShipType,"Hgn_DreadnaughtAutogun","Weapon_HullDefense5","Weapon_HullDefense5");
-StartShipWeaponConfig(NewShipType,"Hgn_DreadnaughtAutogun","Weapon_HullDefense6","Weapon_HullDefense6");
-StartShipWeaponConfig(NewShipType,"Hgn_DreadnaughtAutogun","Weapon_HullDefense7","Weapon_HullDefense7");
-StartShipWeaponConfig(NewShipType,"Hgn_DreadnaughtAutogun","Weapon_HullDefense8","Weapon_HullDefense8");
-StartShipWeaponConfig(NewShipType,"Hgn_DreadnaughtAutogun","Weapon_HullDefense9","Weapon_HullDefense9");
-StartShipWeaponConfig(NewShipType,"Hgn_DreadnaughtAutogun","Weapon_HullDefense10","Weapon_HullDefense10");
+StartShipWeaponConfig(NewShipType,"MPP_DreadnaughtAutogun","Weapon_HullDefense1","Weapon_HullDefense1");
+StartShipWeaponConfig(NewShipType,"MPP_DreadnaughtAutogun","Weapon_HullDefense2","Weapon_HullDefense2");
+StartShipWeaponConfig(NewShipType,"MPP_DreadnaughtAutogun","Weapon_HullDefense3","Weapon_HullDefense3");
+StartShipWeaponConfig(NewShipType,"MPP_DreadnaughtAutogun","Weapon_HullDefense4","Weapon_HullDefense4");
+StartShipWeaponConfig(NewShipType,"MPP_DreadnaughtAutogun","Weapon_HullDefense5","Weapon_HullDefense5");
+StartShipWeaponConfig(NewShipType,"MPP_DreadnaughtAutogun","Weapon_HullDefense6","Weapon_HullDefense6");
+StartShipWeaponConfig(NewShipType,"MPP_DreadnaughtAutogun","Weapon_HullDefense7","Weapon_HullDefense7");
+StartShipWeaponConfig(NewShipType,"MPP_DreadnaughtAutogun","Weapon_HullDefense8","Weapon_HullDefense8");
+StartShipWeaponConfig(NewShipType,"MPP_DreadnaughtAutogun","Weapon_HullDefense9","Weapon_HullDefense9");
+StartShipWeaponConfig(NewShipType,"MPP_DreadnaughtAutogun","Weapon_HullDefense10","Weapon_HullDefense10");
 StartShipWeaponConfig(NewShipType,"Hgn_DreadnaughtChinTurret","Weapon_DreadTurret","Weapon_DreadTurret");
 addShield(NewShipType,"EMP",10000,20);
 SpawnSalvageOnDeath(NewShipType,"Slv_Chunk_Lrg03",1, 0.40,0,0,0, 0,0,0,50,0,0,0,200,0,0,0,50,0,0,0,50);
