@@ -58,7 +58,7 @@ end
 
 function modkit_base:print(...)
 	local out_tbl = {};
-	out_tbl[1] = "\n[" .. self.own_group .. "]: "
+	out_tbl[1] = "[" .. self.own_group .. "]: "
 	for i, v in arg do
 		if (i ~= 'n') then
 			out_tbl[i + 1] = v;
