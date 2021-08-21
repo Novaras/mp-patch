@@ -106,31 +106,6 @@ if (H_SCHEDULER == nil) then
 		end
 	end
 
-	function scheduler:once(fn, initial_delay, data)
-		if (initial_delay) then
-			local new_event = {
-				id = self.new_event_index,
-				data = data
-			};
-			self.new_event_index = self.new_event_index + 1;
-
-			local outer_self = self;
-			function new_event:fn()
-				%fn({
-					id = %new_event.id,
-					data = %new_event.data
-				});
-				%outer_self.one_off_events[%outer_self.tick][%new_event.id] = nil; -- self clear
-			end
-
-			if (self.one_off_events[self.tick + initial_delay] == nil) then
-				self.one_off_events[self.tick + initial_delay] = {};
-			end
-			self.one_off_events[self.tick + initial_delay][new_event.id] = new_event;
-			modkit.table.printTbl(self.one_off_events);
-		end
-	end
-
 	modkit.scheduler = scheduler;
 
 	H_SCHEDULER = 1;
