@@ -1,3 +1,8 @@
+---@alias CapturableModifier
+---| '0' # Ship cannot be captured
+---| '1' # Ship can be captured
+---| '2' # Ship can be captured (used by stock code)
+
 ---@class ShipAttribs : Attribs
 ---@field _stunned number
 ---@field _ab_targets table
@@ -8,6 +13,7 @@
 ---@field _default_vol string
 ---@field _auto_launch '0'|'1'
 ---@field _visibility table<Player, Visibility>
+---@field _capturable_mod CapturableModifier
 
 ---@class Ship : Base, ShipAttribs
 modkit_ship = {
@@ -27,7 +33,8 @@ modkit_ship = {
 			_auto_launch = 1,
 			_visibility = {
 				default = VisNone
-			}
+			},
+			_capturable_mod = 1
 		};
 	end,
 };
@@ -572,6 +579,22 @@ end
 
 function modkit_ship:allInHyperSpace()
 	return SobGroup_AreAllInHyperspace(self.own_group);
+end
+
+-- === Flags (need better name) ===
+
+--- Sets the 'capturable' modifier flag on this ship. This flag only effects ships with the `"CanBeCaptured"` ability.
+---
+--- **Note: There is no way to check whether a ship is capturable or not, so this function is not a getter for that, only for this modifier.**
+---
+---@param capturable CapturableModifier
+---@return CapturableModifier
+function modkit_ship:capturableModifier(capturable)
+	if (capturable) then
+		self._capturable_mod = capturable;
+		SobGroup_SetCaptureState(self.own_group, capturable);
+	end
+	return self._capturable_mod;
 end
 
 -- === Ability stuff ===
