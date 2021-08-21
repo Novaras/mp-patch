@@ -125,7 +125,6 @@ NewShipType.alternativeHyperspaceTime=12.5
 NewShipType.SMHighlightDistMin=20000
 NewShipType.SMHighlightDistMax=30000
 addAbility(NewShipType,"MoveCommand",1,0);
-addAbility(NewShipType,"CanDock",1,1);
 NewShipType.dockTimeBetweenTwoFormations=1
 NewShipType.dockTimeBeforeStart=2
 NewShipType.dockNrOfShipsInDockFormation=1
@@ -148,7 +147,7 @@ addAbility(NewShipType,"HyperSpaceCommand",0,2,500,1000,0,3);
 addAbility(NewShipType,"CanAttack",1,1,0,0,0.35,1.2,"BigCapitalShip, SmallCapitalShip, Capturer, Frigate, SubSystem, Mothership, Corvette, Fighter, Utility","Frontal",{Fighter="MoveToTargetAndShoot"},{Corvette="MoveToTargetAndShoot"},{Frigate="MoveToTargetAndShoot"},{Munition="MoveToTargetAndShoot"},{SubSystem="FrontalVsSubSystem"});
 addAbility(NewShipType,"GuardCommand",74,3000,1400);
 
-addAbility(NewShipType,"CanBeCaptured",			     100, 1, "SalCap");
+addAbility(NewShipType,"CanBeCaptured",			     100, 1);
 -- addAbility(NewShipType,"CanHaveTechHarvested","FighterDrive", 1, 100);
 
 addAbility(NewShipType,"CanBeRepaired");
