@@ -10,7 +10,7 @@ if (H_DRIVER == nil) then
 		dofilepath("data:scripts/modkit.lua");
 	end
 
-	---@class GLOBAL_SHIPS : MemGroup
+	---@class GLOBAL_SHIPS : SheduledFilters, MemGroup
 	---@field _entities Ship[]
 	---@field all fun(): Ship[]
 	GLOBAL_SHIPS = modkit.MemGroup.Create("mg-ships-global");
