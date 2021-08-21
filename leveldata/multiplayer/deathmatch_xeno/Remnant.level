@@ -188,7 +188,7 @@ function DetermChunk()
 	addPoint("StartPos1", {13063.0, 0.0, -3000.0}, {0.0, -75.0, 0.0})
 
 	addPoint("StartPos2", {-11963.0, 0.0, 8000.0}, {0.0, 125.0, -0.0})
-	addSquadron("mover-spawner-debris", "mpp_mover_spawner", { -11000, 0, 3000 }, 2, { 0, 0, 0 }, 0, 0);
+	addSquadron("mover-spawner-debris", "mpp_mover_spawner", { -11000, 0, 3000 }, 1, { 0, 0, 0 }, 0, 0);
 	addPoint("StartPos3", {-13063.0, 0.0, -3000.0}, {0.0, 75.0, 0.0})
 
 	addPoint("StartPos4", {5063.0, 31167.0, -0.0}, {0.0, -90.0, 0.0})
