@@ -14,6 +14,7 @@
 ---@field _auto_launch '0'|'1'
 ---@field _visibility table<Player, Visibility>
 ---@field _capturable_mod CapturableModifier
+---@field _ghosted bool
 
 ---@class Ship : Base, ShipAttribs
 modkit_ship = {
@@ -81,6 +82,7 @@ function modkit_ship:actualSpeedSq()
 end
 
 --- Returns the ship's current position (or the center position of the ship's batch squad).
+--- If `pos` is supplied, it will set the position of the ship instantly.
 ---
 ---@param pos Position
 ---@return Position
@@ -299,6 +301,20 @@ function modkit_ship:stance(new_stance)
 		SobGroup_SetStance(self.own_group, new_stance);
 	end
 	return SobGroup_GetStance(self.own_group);
+end
+
+--- Causes this ship to be 'ghosted', which is pretty much akin to no-clip (no collisions will affect this ship).
+---
+---@param enabled '0'|'1'
+---@return bool
+function modkit_ship:ghost(enabled)
+	if (enabled == 0) then
+		self._ghosted = nil;
+	else
+		self._ghosted = 1;
+	end
+	SobGroup_SetGhost(self.own_group, enabled);
+	return self._ghosted;
 end
 
 --- Launches `docked` from this ship, if `docked` is currently docked with this ship.
@@ -725,22 +741,29 @@ function modkit_ship:spawn(spawn, volume)
 	return self._despawned_at_volume;
 end
 
---- Spawns a new ship at `position`
----@param type any
+--- Spawns a new ship of `type` at `position` for `player_index`. This new ship is placed in `spawn_group`, or a fresh group if `spawn_group` is not supplied.
+---
+--- **Note: The temporary group returned should be functionally equivalent to `own_group` of a more typically
+--- available ship, but is _not_ the same group (it should only contain the same ships).**
+---
+---@param ship_type any
 ---@param position? any
+---@param player_index? integer
 ---@param spawn_group? string
 ---@return string
-function modkit_ship:spawnShip(type, position, spawn_group)
+function modkit_ship:spawnShip(ship_type, position, player_index, spawn_group)
 	position = position or self:position();
 	spawn_group = spawn_group or SobGroup_Fresh("spawner-group-" .. self.id);
+	player_index = player_index or self.player.id;
 	local volume_name = Volume_Fresh("spawner-vol-" .. self.id, position);
-	SobGroup_SpawnNewShipInSobGroup(self.player.id, type, "-", spawn_group, volume_name);
+	SobGroup_SpawnNewShipInSobGroup(player_index, ship_type, "-", spawn_group, volume_name);
 	Volume_Delete(volume_name);
 	return spawn_group;
 end
 
 --- Causes this ship to produce a new ship of the given `type`, if it can do so.
 --- The created ship is available through a temporary group (`spawn_group`).
+---
 --- **Note: The temporary group returned should be functionally equivalent to `own_group` of a more typically
 --- available ship, but is _not_ the same group (it should only contain the same ships).**
 ---
