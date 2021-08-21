@@ -363,6 +363,13 @@ if (nil) then
 	function SobGroup_SpawnNewShipInSobGroup(player_index, ship_type, new_squad_name, target_group, volume_name)
 	end
 
+	--- Causes ships in target_group to become 'ghosted', which is pretty much akin to a 'no-clip' mode whereby the affected ships ignore collision with other objects.
+	---@param target_group string
+	---@param enable '0'|'1'
+	---@return nil
+	function SobGroup_SetGhost(target_group, enable)
+	end
+
 	--- Sets the _inherent_ visibility of the `target_group` for player `target_player`.
 	---
 	--- Note: there is no corresponding getter for this value, so you should store it yourself if you need to get it later.
