@@ -2,15 +2,13 @@
 NewShipType = StartShipConfig()
 NewShipType.displayedName="Mover Spawner"
 NewShipType.sobDescription="Mover Spawner"
-NewShipType.maxhealth=1600000
-NewShipType.regentime=0
-NewShipType.minRegenTime=0
+NewShipType.maxhealth=100000
+NewShipType.regentime=300
+NewShipType.minRegenTime=200
 NewShipType.sideArmourDamage = getShipNum(NewShipType, "sideArmourDamage", 1.0)
 NewShipType.rearArmourDamage = getShipNum(NewShipType, "rearArmourDamage", 1.0)
 NewShipType.isTransferable=0
 NewShipType.paradeData="dummy_parade"
-
-
 NewShipType.mass=5000
 NewShipType.collisionMultiplier=1
 NewShipType.thrusterMaxSpeed=0
@@ -52,7 +50,7 @@ NewShipType.AvoidanceFamily="SuperPriority"
 NewShipType.DisplayFamily="Megalith"
 NewShipType.AutoFormationFamily="Fighter"
 NewShipType.CollisionFamily="Unmoveable"
-NewShipType.ArmourFamily="ChunkArmour"
+NewShipType.ArmourFamily="HeavyArmour"
 setSupplyValue(NewShipType, "SinglePlayerMisc", 1.0)
 NewShipType.fighterValue=0
 NewShipType.corvetteValue=0
@@ -86,7 +84,6 @@ NewShipType.nlipsRange=75000
 NewShipType.nlipsFar=0
 NewShipType.nlipsFarRange=0
 NewShipType.SMRepresentation="Mesh"
-NewShipType.alwaysInRenderList=1
 NewShipType.meshRenderLimit=5000000
 NewShipType.dotRenderLimit=10
 NewShipType.visibleInSecondary=1
