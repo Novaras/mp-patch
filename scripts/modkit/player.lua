@@ -41,6 +41,12 @@ if (modkit_player_proto == nil) then
 				end
 				return out;
 			end
+
+			function GLOBAL_PLAYERS:alive()
+				return modkit.table.filter(self:all(), function (player)
+					return player:isAlive();
+				end);
+			end
 		end
 	end
 
@@ -63,6 +69,7 @@ if (modkit_player_proto == nil) then
 	end
 
 	-- Whether or not the player is human
+	---@return bool
 	function modkit_player_proto:isHuman()
 		return self:difficulty() == 0;
 	end
@@ -210,8 +217,9 @@ if (modkit_player_proto == nil) then
 	end
 
 	--- Whether or not the player is alive.
+	---@return bool
 	function modkit_player_proto:isAlive()
-		return Player_IsAlive(self.id);
+		return Player_IsAlive(self.id) == 1;
 	end
 
 	--- Returns whether or not the player has this subsystem.
