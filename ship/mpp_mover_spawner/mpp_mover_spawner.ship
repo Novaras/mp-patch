@@ -110,5 +110,15 @@ NewShipType.chanceOfSpecialDeath=0
 NewShipType.deadSobFadeTime=1
 NewShipType.trailLinger=3
 loadShipPatchList(NewShipType,"data:sound/sfx/ship/megaliths/",1,"RandomEmit/KAROS_HULKS","Root");
+NewShipType.allowScuttle = 0;
+
+-- kaboom
+NewShipType.explosiveDamageOnDeath=4000
+NewShipType.minFalloffDamageDist=500
+NewShipType.maxFalloffDamageDist=500 * 10 -- ref: ms max is 3k
+NewShipType.maxFalloffForce=500*10
+
+NewShipType.explosiveScuttleDamageOnDeath=4000
+NewShipType.maxFalloffScuttleDamageDist=800*3
 
 addCustomCode(NewShipType, "data:scripts/driver.lua", "load", "create", "update", "destroy", "mpp_mover_spawner", 1);

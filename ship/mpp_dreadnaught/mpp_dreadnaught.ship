@@ -195,4 +195,15 @@ NewShipType.explosiveDamageOnDeath=745
 NewShipType.radiusDamageEvadeMod=1.1
 NewShipType.canSurround=1
 
+NewShipType.allowScuttle = 0;
+
+-- kaboom
+NewShipType.explosiveDamageOnDeath=4000
+NewShipType.minFalloffDamageDist=500
+NewShipType.maxFalloffDamageDist=500 * 10 -- ref: ms max is 3k
+NewShipType.maxFalloffForce=500*10
+
+NewShipType.explosiveScuttleDamageOnDeath=4000
+NewShipType.maxFalloffScuttleDamageDist=800*3
+
 addCustomCode(NewShipType, "data:scripts/driver.lua", "load", "create", "update", "destroy", "mpp_dreadnaught", 1);
