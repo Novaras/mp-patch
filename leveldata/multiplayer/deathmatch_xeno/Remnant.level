@@ -420,7 +420,7 @@ function NonDetermChunk()
 	setBattleMusic("data:sound/music/battle/battle_01")
 end
 
-levelDesc = "Remnant";
+levelDesc = "Spectators 4P Xeno - Remnant";
 maxPlayers = 8;
 player = {};
 player[0] =
