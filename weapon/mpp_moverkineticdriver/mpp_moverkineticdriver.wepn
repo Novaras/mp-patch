@@ -1,8 +1,11 @@
 
-StartWeaponConfig(NewWeaponType,"Gimble","Bullet","Plasma_Bomb","Normal",1200,1500,0,0,0,0,1,1,0,0.2,2,1,0,0,0,0,0.1,"Normal",0,0,0);
+StartWeaponConfig(NewWeaponType,"Gimble","Bullet","Plasma_Bomb","Normal",1000,1500,0,0,0,0,1,1,0,0.2,2,1,0,0,0,0,0.1,"Normal",0,0,0);
 AddWeaponResult(NewWeaponType,"Hit","DamageHealth","Target",100,100,"");
 setPenetration(NewWeaponType,5,1,
-{MediumArmour=1},
+{MoverArmour=1.1},
+{LightArmour=0.5},
+{LightArmour_hw1=0.6},
+{MediumArmour=0.9},
 {HeavyArmour=3},
 {DestroyerArmour=1.5},
 {SuperUtilityArmour = 0.8},
