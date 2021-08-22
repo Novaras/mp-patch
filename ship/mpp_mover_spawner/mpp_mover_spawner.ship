@@ -2,8 +2,8 @@
 NewShipType = StartShipConfig()
 NewShipType.displayedName="Mover Spawner"
 NewShipType.sobDescription="Mover Spawner"
-NewShipType.maxhealth=100000
-NewShipType.regentime=300
+NewShipType.maxhealth=120000
+NewShipType.regentime=230
 NewShipType.minRegenTime=200
 NewShipType.sideArmourDamage = getShipNum(NewShipType, "sideArmourDamage", 1.0)
 NewShipType.rearArmourDamage = getShipNum(NewShipType, "rearArmourDamage", 1.0)
