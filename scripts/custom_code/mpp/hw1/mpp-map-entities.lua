@@ -106,16 +106,18 @@ function mpp_mover_spawner_proto:update()
 		end);
 	end
 
-	-- dirty hack to resolve ownership issues of the second spawner in variable player games
-	if (self.player.id ~= 0) then
-		---@type Player
-		--- the lowest index teammate = ceil(total players / 2)
-		--- 2 -> 1, 4 -> 2, 6 -> 3
-		local target_player_index = ceil(modkit.table.length(GLOBAL_PLAYERS:alive()) / 2);
-		-- if p2 (third player) exists and is alive, swap ownership from p1 to them (its a 4 player game)
-		local pN = GLOBAL_PLAYERS:all()[target_player_index];
-		if (pN and pN:isAlive() == 1) then
-			SobGroup_SwitchOwner(self.own_group, pN.id);
+	if (self:tick() == 10) then -- wait a second to let gamerule tidy up dead guys...
+		-- dirty hack to resolve ownership issues of the second spawner in variable player games
+		if (self.player.id ~= 0) then
+			---@type Player
+			--- the lowest index teammate = ceil(total players / 2)
+			--- 2 -> 1, 4 -> 2, 6 -> 3
+			local target_player_index = ceil(modkit.table.length(GLOBAL_PLAYERS:alive()) / 2);
+			-- if p2 (third player) exists and is alive, swap ownership from p1 to them (its a 4 player game)
+			local pN = GLOBAL_PLAYERS:all()[target_player_index];
+			if (pN and pN:isAlive() == 1) then
+				SobGroup_SwitchOwner(self.own_group, pN.id);
+			end
 		end
 	end
 end
