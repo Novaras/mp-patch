@@ -1,7 +1,7 @@
 NewShipType = StartShipConfig()
 NewShipType.displayedName="$1702"
 NewShipType.sobDescription="$1703"
-NewShipType.maxhealth=getShipNum(NewShipType, "maxhealth", 1000)
+NewShipType.maxhealth=getShipNum(NewShipType, "maxhealth", 2000)
 NewShipType.regentime=300
 NewShipType.minRegenTime=220
 NewShipType.sideArmourDamage=1.2
@@ -135,8 +135,7 @@ addAbility(NewShipType,"CanAttack",1,1,1,0,0.35,1,"Corvette, Fighter, Frigate,Mo
 addAbility(NewShipType,"GuardCommand",1,3000,500);
 addAbility(NewShipType,"HyperspaceViaGateCommand",1,3,1,0.3);
 
--- addAbility(NewShipType,"CanDock",1,1);
-addAbility(NewShipType, "CaptureCommand", 1, 10);
+addAbility(NewShipType, "CaptureCommand", 0, 10);
 
 LoadModel(NewShipType,1);
 StartShipWeaponConfig(NewShipType,"Kpr_KineticDriver","Weapon_KineticDriver","Weapon_KineticDriver");
@@ -155,4 +154,5 @@ setEngineTrail(NewShipType,1,3.4,"trail_ribbon.tga",0.1,0.1,0.025,2);
 setEngineBurn(NewShipType,17,0.5,1,12,0,0.7,0.1,35);
 loadShipPatchList(NewShipType,"data:sound/sfx/ship/misc/",0,"Engines/KeeperMoverEng","",1,"Ambience/KeeperMoverAmb","");
 
+addAbility(NewShipType, "CustomCommand", 1, "CAPTURE DREADNAUGHT", 1, 0, 1200, 1200, 0, 1, 200, "data:scripts/driver.lua", "start", "go", "finish", "mpp_mover", 1, 4, 0);
 addCustomCode(NewShipType, "data:scripts/driver.lua", "load", "create", "update", "destroy", "mpp_mover", 1);
