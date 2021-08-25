@@ -203,71 +203,33 @@ end
 
 -- === lifetime ===
 
---- Need to init on first `update` instead of `create` - `create` provides no group or ship id!
---- Disables the frigate's auto-launching, and initialises the drone rebuilding code to run on a fast schedule
-function drones_proto:init()
-	if (self._init == 0) then
-		self:autoLaunch(ShipHoldStayDockedAlways);
-
-		-- the drones are not picked up until the second run (as their data is not available on `create`, only `update`)
-		-- so it would take two cycles MINIMUM for a drone to respawn and be controllable, at worst nearly 3 (i.e if a drone dies
-		-- just after a cycle, it will be rebuilt next cycle, and only the cycle _after that_ would it be useable)
-		-- hence, we run this restocking process at a faster rate, meaning our drone list will accurate unless a drone dies closer
-		-- than `base_rate - fast_rate` seconds ago (i.e `1 - 0.5` makes us accurate to a half-second)
-		if (self.collate_event_id == nil) then
-			self.collate_event_id = modkit.scheduler:every(
-				10,
-				function ()
-					-- print("[" .. Universe_GameTime() .. "] begin fast run")
-					if (%self:frigateReady()) then
-						%self:pruneDeadDrones();
-						%self:addProducedDronesToList();
-						%self:launchDrones();
-					else
-						%self:killDrones();
-					end
-					-- print("fast run end");
-				end
-			);
-		end
-		if (self.repopulate_event_id == nil) then
-			self.repopulate_event_id = modkit.scheduler:every(
-				20, -- seconds = this number * modkit_scheduler.seconds_per_tick
-				function ()
-					-- print("[" .. Universe_GameTime() .. "] begin slow run")
-					if (%self:frigateReady()) then
-						%self:produceMissingDrones();
-					end
-					-- print("slow run end");
-				end
-			);
-		end
-
-		self._init = 1;
-	end
-end
-
 -- === hooks ===
 
 function drones_proto:update()
+	if (self:tick() == 1) then
+		self:autoLaunch(ShipHoldStayDockedAlways);
+	end
 	if (self:tick() >= 3) then -- some time to undock
-		self:init();
-
-		--print("main run start: " .. Universe_GameTime());
 		if (self:frigateReady()) then
+			self:pruneDeadDrones();
+			self:addProducedDronesToList();
+			self:launchDrones();
+
 			self:syncDroneStances();
 			self:syncDroneROEs();
 			self:manageDroneTargets();
 			self:positionLaunchedDrones();
+
+			if (mod(self:tick(), 2) == 0) then
+				self:produceMissingDrones();
+			end
+		else
+			self:killDrones();
 		end
-		--print("main run end: " .. Universe_GameTime());
 	end
 end
 
 function drones_proto:destroy()
-	modkit.scheduler:clear(self.repopulate_event_id);
-	modkit.scheduler:clear(self.collate_event_id);
-
 	for _, drone in self.live_drones do
 		drone:HP(0);
 	end
