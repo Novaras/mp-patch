@@ -1,0 +1,26 @@
+
+StartWeaponConfig(NewWeaponType,"AnimatedTurret","Bullet","Dread_Bomb","Normal",2000,5500,0,0,0,0,1,1,1,0.5,2,3,1,1,120,120,0.1,"Normal",1,0,0);
+AddWeaponResult(NewWeaponType,"Hit","DamageHealth","Target",2000,2000,"");
+setPenetration(NewWeaponType,90,1,
+{MediumArmour=0.9},
+{SuperUtilityArmour=0.7},
+{DestroyerArmour=0.9});
+setAccuracy(NewWeaponType,1,
+{Swarmer=0.01},
+{SpaceMine=0.01},
+{Torpedo=0},
+{HeavyMissile=0},
+{SmallMissile=0},
+{Fighter=0},
+{Fighter_hw1=0},
+{Corvette=0},
+{Corvette_hw1=0},
+{munition=0},
+{SubSystem=0},
+{Utility=0},
+{Resource=0});
+setAngles(NewWeaponType,30,-170,170,-1,30);
+setMiscValues(NewWeaponType,5,0.4);
+
+setFireMultFactor(NewWeaponType, 1.0);
+setBallistics(NewWeaponType,0,1.0);

@@ -1,9 +1,9 @@
 NewShipType = StartShipConfig()
 NewShipType.displayedName="$1540"
 NewShipType.sobDescription="$1541"
-NewShipType.maxhealth=getShipNum(NewShipType, "maxhealth", 177600)
-NewShipType.regentime=2000
-NewShipType.minRegenTime=2000
+NewShipType.maxhealth=getShipNum(NewShipType, "maxhealth", 200000)
+NewShipType.regentime=600
+NewShipType.minRegenTime=300
 NewShipType.sideArmourDamage = getShipNum(NewShipType, "sideArmourDamage", 1.0)
 NewShipType.rearArmourDamage = getShipNum(NewShipType, "rearArmourDamage", 1.0)
 setTacticsMults(NewShipType, "ENGINEACCEL", 1.10, 0.90, 1.0)
@@ -27,7 +27,7 @@ NewShipType.mainEngineBrakeTime=2
 NewShipType.rotationAccelTime=0.7
 NewShipType.rotationBrakeTime=0.5
 NewShipType.thrusterUsage=1
-NewShipType.accelerationAngle=30
+NewShipType.accelerationAngle=40
 NewShipType.mirrorAngle=0
 NewShipType.secondaryTurnAngle=0
 NewShipType.maxBankingAmount=10
@@ -153,7 +153,7 @@ addAbility(NewShipType,"CanBeCaptured",			     100, 1);
 addAbility(NewShipType,"CanBeRepaired");
 NewShipType.noCombatGrouping=1
 LoadModel(NewShipType,1);
-StartShipWeaponConfig(NewShipType,"Hgn_DreadnaughtIonCannon","Weapon_Triton1","Weapon_Triton1");
+StartShipWeaponConfig(NewShipType,"MPP_DreadnaughtIonCannon","Weapon_Triton1","Weapon_Triton1");
 StartShipWeaponConfig(NewShipType,"MPP_DreadnaughtAutogun","Weapon_HullDefense1","Weapon_HullDefense1");
 StartShipWeaponConfig(NewShipType,"MPP_DreadnaughtAutogun","Weapon_HullDefense2","Weapon_HullDefense2");
 StartShipWeaponConfig(NewShipType,"MPP_DreadnaughtAutogun","Weapon_HullDefense3","Weapon_HullDefense3");
@@ -164,7 +164,7 @@ StartShipWeaponConfig(NewShipType,"MPP_DreadnaughtAutogun","Weapon_HullDefense7"
 StartShipWeaponConfig(NewShipType,"MPP_DreadnaughtAutogun","Weapon_HullDefense8","Weapon_HullDefense8");
 StartShipWeaponConfig(NewShipType,"MPP_DreadnaughtAutogun","Weapon_HullDefense9","Weapon_HullDefense9");
 StartShipWeaponConfig(NewShipType,"MPP_DreadnaughtAutogun","Weapon_HullDefense10","Weapon_HullDefense10");
-StartShipWeaponConfig(NewShipType,"Hgn_DreadnaughtChinTurret","Weapon_DreadTurret","Weapon_DreadTurret");
+StartShipWeaponConfig(NewShipType,"MPP_DreadnaughtChinTurret","Weapon_DreadTurret","Weapon_DreadTurret");
 addShield(NewShipType,"EMP",10000,20);
 SpawnSalvageOnDeath(NewShipType,"Slv_Chunk_Lrg03",1, 0.40,0,0,0, 0,0,0,50,0,0,0,200,0,0,0,50,0,0,0,50);
 SpawnSalvageOnDeath(NewShipType,"Slv_Chunk_Lrg04",1, 0.19,0,0,0, 50,40,-150,50,65,25,5,25,0,0,0,95,0,0,0,50);
