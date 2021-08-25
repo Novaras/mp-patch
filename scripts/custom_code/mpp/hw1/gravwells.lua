@@ -116,7 +116,6 @@ end
 --- Stuff that only AI-controlled gravwells should do.
 --- Causes the gravwell to automatically activate under certain conditions.
 function gravwell_proto:AIOnly()
-	print(self.own_group .. ":AIOnly begin");
 	if (self.player:isHuman() == nil) then
 		local trappables = self:calculateNewTrappables();
 		local friendlies = modkit.table.filter(trappables, function (ship)
@@ -185,7 +184,6 @@ function gravwell_proto:start()
 end
 
 function gravwell_proto:go()
-	print(self.own_group .. ":go begin");
 	local new_trappables = self:calculateNewTrappables(); -- calculate which ships to stun this pass
 	self:setTrapped(new_trappables, 1); -- stun them
 	local difference_from_last = modkit.table.difference(self.previous_tick_trapped, new_trappables); -- any from last who didnt pass this time = diff to unstun
@@ -193,13 +191,10 @@ function gravwell_proto:go()
 	self:ownEffects(1);
 	self:rememberUniqueTrapped(new_trappables); -- record any new ships we havent recorded interacting with yet (used for cleanup)
 	self.previous_tick_trapped = new_trappables; -- save last run ships to compare with next run
-	print(self.own_group .. ":go end");
 end
 
 function gravwell_proto:finish()
-	print(self.own_group .. ":finish begin");
 	self:cleanUp();
-	print(self.own_group .. ":finish end");
 end
 
 modkit.compose:addShipProto("kus_gravwellgenerator", gravwell_proto);
