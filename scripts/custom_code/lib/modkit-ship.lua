@@ -15,6 +15,7 @@
 ---@field _visibility table<Player, Visibility>
 ---@field _capturable_mod CapturableModifier
 ---@field _ghosted bool
+---@field _invulnerable bool
 
 ---@class Ship : Base, ShipAttribs
 modkit_ship = {
@@ -346,6 +347,7 @@ function modkit_ship:attackFamily()
 	end
 end
 
+---@return bool
 function modkit_ship:isAnyFamilyOf(families)
 	for k, v in families do
 		if (self:attackFamily() == v) then
@@ -488,6 +490,21 @@ function modkit_ship:isDrone()
 end
 
 -- === State queries ===
+
+---
+---@param invulnerable '0'|'1'
+---@return bool
+function modkit_ship:invulnerable(invulnerable)
+	if (invulnerable) then
+		if (invulnerable ~= 0) then
+			self._invulnerable = invulnerable;
+		else
+			self._invulnerable = nil;
+		end
+		SobGroup_SetInvulnerability(self.own_group, self._invulnerable or 0);
+	end
+	return self._invulnerable;
+end
 
 --- Get or set the stunned status of the ship.
 -- Returns whether or not the ship should currently be stunned (if stunned previously via :stunned)
