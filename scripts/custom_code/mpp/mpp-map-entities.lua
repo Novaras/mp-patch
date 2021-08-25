@@ -26,6 +26,7 @@ function mpp_dreadnaught_proto:ownerSpecificBehavior()
 end
 
 function mpp_dreadnaught_proto:update()
+	self:print("update " .. self:tick() .. " begin");
 	-- ensure visible to all
 	if (self:tick() == 1) then
 		SobGroup_SetCaptureState(self.own_group, 0);
@@ -35,6 +36,7 @@ function mpp_dreadnaught_proto:update()
 	end
 	-- behavior for owners:
 	self:ownerSpecificBehavior();
+	self:print("update " .. self:tick() .. " finish");
 end
 
 modkit.compose:addShipProto("mpp_dreadnaught", mpp_dreadnaught_proto);
@@ -71,6 +73,7 @@ mpp_mover_spawner_proto = {
 };
 
 function mpp_mover_spawner_proto:spawnNewMover()
+	self:print("spawn mover call");
 	local new_mover_group = self:spawnShip("mpp_mover", self:position());
 	SobGroup_SetGhost(new_mover_group, 1);
 	local move_to = self:position();
@@ -81,13 +84,17 @@ function mpp_mover_spawner_proto:spawnNewMover()
 			move_to[i] = move_to[i] - 200;
 		end
 	end
+	self:print("issue move...");
 	SobGroup_Move(self.player.id, new_mover_group, Volume_Fresh("mover-vol-" .. self.id .. "-" .. self:tick(), move_to));
 	modkit.scheduler:every(5, function (event)
+		self:print(" -> distance to mover proc begin!");
 		if (SobGroup_GetDistanceToSobGroup(%self.own_group, %new_mover_group) > 300) then
 			SobGroup_SetGhost(%new_mover_group, 0);
 			modkit.scheduler:clear(event.id);
 		end
+		self:print(" <- distance to spawner proc finish!");
 	end);
+	self:print("spawn call finished");
 end
 
 function mpp_mover_spawner_proto:update()
@@ -96,6 +103,7 @@ function mpp_mover_spawner_proto:update()
 		self:visibility(VisFull);
 		self:print("no spawner proc, let's launch it (interval: " .. 30 / modkit.scheduler.seconds_per_tick .. ")!\t[" .. Universe_GameTime() .. "]");
 		self.spawner_proc = modkit.scheduler:every(30 / modkit.scheduler.seconds_per_tick, function ()
+			self:print("spawner main proc start");
 			local outer_self = %self;
 			local our_movers = modkit.table.filter(GLOBAL_SHIPS:corvettes(), function (ship)
 				return ship.type_group == "mpp_mover" and %outer_self.player.id == ship.player.id;
@@ -103,10 +111,12 @@ function mpp_mover_spawner_proto:update()
 			if (modkit.table.length(our_movers) < mpp_mover_spawner_proto.max_movers) then
 				%self:spawnNewMover();
 			end
+			self:print("spawner main proc end");
 		end);
 	end
 
 	if (self:tick() == 10) then -- wait a second to let gamerule tidy up dead guys...
+		self:print("do player swap stuff");
 		-- dirty hack to resolve ownership issues of the second spawner in variable player games
 		if (self.player.id ~= 0) then
 			---@type Player
@@ -116,6 +126,7 @@ function mpp_mover_spawner_proto:update()
 			-- if p2 (third player) exists and is alive, swap ownership from p1 to them (its a 4 player game)
 			local pN = GLOBAL_PLAYERS:all()[target_player_index];
 			if (pN and pN:isAlive() == 1) then
+				self:print("switch owner to " .. pN.id .. " from " .. self.player.id .. "!");
 				SobGroup_SwitchOwner(self.own_group, pN.id);
 			end
 		end
