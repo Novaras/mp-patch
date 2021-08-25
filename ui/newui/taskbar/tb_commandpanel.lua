@@ -125,4 +125,4 @@ BTN_CMD_SPEEDBOOST		= GetCommandButton("btnSpeedActivate",			"$2959", 				173,	"
 BTN_CMD_GRAVWELL		= GetCommandButton(	"btnGravWellActivate",		"$2957", 				170,	"DATA:UI\\NewUI\\Taskbar\\CommandIcons\\cmd_ico_gravewellgenerator.dds",		"MainUI_UserEventData( eCustomActivate, 1 );" , "MainUI_UserEventData( eCustomDeActivate, 1 );")
 BTN_CMD_CUSTOM			= GetCommandButton(	"btnCustomActivate",		"$2956", 				168,	"DATA:UI\\NewUI\\Taskbar\\CommandIcons\\cmd_ico_specialattack.dds",				"MainUI_UserEventData( eCustomActivate, 0 );" , "MainUI_UserEventData( eCustomDeActivate, 0 );")
 
-BTN_CMD_CAPTURE_DREAD	= GetCommandButton("btnCaptureDreadActivate",	"CAPTURE DREADNAUGHT (%s)", 	173,	"DATA:UI\\NewUI\\Taskbar\\CommandIcons\\cmd_ico_capture.dds",		"MainUI_UserEventData( eCustomToggle, 4 );")   				
+BTN_CMD_CAPTURE_DREAD	= GetCommandButton("btnCaptureDreadActivate",	"CAPTURE DREADNAUGHT (%s)", 	175,	"DATA:UI\\NewUI\\Taskbar\\CommandIcons\\cmd_ico_capture.dds",		"MainUI_UserEventData( eCustomToggle, 0 );", "MainUI_UserEventData( eCustomDeActivate, 0 );")   				
