@@ -1,7 +1,10 @@
 -- Proto for any ships which are captured by salcaps via latching and waiting instead of dragging the ship.
 
 ---@class DreadnaughtProto : Ship
-mpp_dreadnaught_proto = {};
+---@field unclaimed_tumble_target table<integer, Position>
+mpp_dreadnaught_proto = {
+	unclaimed_tumble_target = {0.01, 0.03, 0.02}
+};
 
 function mpp_dreadnaught_proto:ensureVisible()
 	if (self:visibility() ~= VisFull) then
@@ -11,17 +14,53 @@ end
 
 function mpp_dreadnaught_proto:ownerSpecificBehavior()
 	if (self.player.id == -1) then 				-- owned by env
-		if (self:tumble()[1] == 0) then
-			self:tumble({0.45, 0.45, 0.45});
-		end
 		self:canDoAbility(AB_Targeting, 0);
 		self:canDoAbility(AB_Attack, 0);
+		self:canDoAbility(AB_Move, 0);
+		self:canDoAbility(AB_Steering, 0);
+
+		-- ---@type table<integer, Position>
+		-- --- we need to keep 'nudging' the tumble a little if it falls too low
+		-- local extra_tumble = {};
+		-- for i, v in self:tumble() do
+		-- 	extra_tumble[i] = min(0.1, mpp_dreadnaught_proto.unclaimed_tumble_target[i] - v); -- min(1, target - current) = boost
+		-- end
+		-- self:tumble(extra_tumble);
+
+		if (self:tumble()[1] == 0) then
+			self:print("tumbling");
+			self:tumble(mpp_dreadnaught_proto.unclaimed_tumble_target);
+		end
 	else 										-- owned by a player
 		if (self:tumble()[1] ~= 0) then
 			self:tumble(0);
 		end
 		self:canDoAbility(AB_Targeting, 1);
 		self:canDoAbility(AB_Attack, 1);
+		self:canDoAbility(AB_Move, 1);
+		self:canDoAbility(AB_Steering, 1);
+	end
+end
+
+function mpp_dreadnaught_proto:stunAndRepairIfCritical()
+	self:print("check dmg...");
+	if (self:HP() < 0.2) then
+		self:invulnerable(1);
+		self:stunned(1);
+		self:tumble({0.1, 0.1, 0.1});
+		self.healing = 1;
+	end
+
+	if (self.healing == 1) then
+		self:playEffect("speed_burst_flash", 10);
+		self:HP(self:HP() + 0.01);
+		if (self:HP() > 0.8) then
+			self:invulnerable(0);
+			self:stunned(0);
+			self:tumble(0);
+			modkit.scheduler:clear(event.id);
+			self:print("done, stop healing");
+		end
 	end
 end
 
@@ -36,6 +75,7 @@ function mpp_dreadnaught_proto:update()
 	end
 	-- behavior for owners:
 	self:ownerSpecificBehavior();
+	self:stunAndRepairIfCritical();
 	self:print("update " .. self:tick() .. " finish");
 end
 
@@ -47,6 +87,12 @@ modkit.compose:addShipProto("mpp_dreadnaught", mpp_dreadnaught_proto);
 ---@class MoverProto : Ship
 ---@field dreadnaught DreadnaughtProto
 mpp_mover_proto = {};
+
+function mpp_mover_proto:update()
+	if (self:tick() > 5) then
+		self:ghost(0);
+	end
+end
 
 function mpp_mover_proto:start()
 	self:print("hi");
@@ -75,7 +121,7 @@ mpp_mover_spawner_proto = {
 function mpp_mover_spawner_proto:spawnNewMover()
 	self:print("spawn mover call");
 	local new_mover_group = self:spawnShip("mpp_mover", self:position());
-	SobGroup_SetGhost(new_mover_group, 1);
+	SobGroup_SetGhost(new_mover_group, 1); -- the mover must unghost itself
 	local move_to = self:position();
 	for i, _ in move_to do
 		if (i ~= 2) then
@@ -86,48 +132,59 @@ function mpp_mover_spawner_proto:spawnNewMover()
 	end
 	self:print("issue move...");
 	SobGroup_Move(self.player.id, new_mover_group, Volume_Fresh("mover-vol-" .. self.id .. "-" .. self:tick(), move_to));
-	modkit.scheduler:every(5, function (event)
-		self:print(" -> distance to mover proc begin!");
-		if (SobGroup_GetDistanceToSobGroup(%self.own_group, %new_mover_group) > 300) then
-			SobGroup_SetGhost(%new_mover_group, 0);
-			modkit.scheduler:clear(event.id);
-		end
-		self:print(" <- distance to spawner proc finish!");
-	end);
 	self:print("spawn call finished");
 end
 
 function mpp_mover_spawner_proto:update()
-	-- if spawner process not running, set it up for every 30s
-	if (self.spawner_proc == nil) then
-		self:visibility(VisFull);
-		self:print("no spawner proc, let's launch it (interval: " .. 30 / modkit.scheduler.seconds_per_tick .. ")!\t[" .. Universe_GameTime() .. "]");
-		self.spawner_proc = modkit.scheduler:every(30 / modkit.scheduler.seconds_per_tick, function ()
-			self:print("spawner main proc start");
-			local outer_self = %self;
-			local our_movers = modkit.table.filter(GLOBAL_SHIPS:corvettes(), function (ship)
-				return ship.type_group == "mpp_mover" and %outer_self.player.id == ship.player.id;
-			end);
-			if (modkit.table.length(our_movers) < mpp_mover_spawner_proto.max_movers) then
-				%self:spawnNewMover();
-			end
-			self:print("spawner main proc end");
+	self:print("tick: " .. self:tick() .. ",\tplayer (modkit): " .. self.player.id .. "\tplayer (engine): " .. SobGroup_GetPlayerOwner(self.own_group));
+	if (self.player.id == -1 and self:tick() > 2) then
+		if (MAP_METADATA == nil) then
+			dofilepath("data:leveldata/multiplayer/deathmatch_xeno/Remnant.level");
+		end
+
+		self:print("do player swap stuff");
+
+		local spawner_map_data = modkit.table.find(MAP_METADATA.spawners, function (spawner_data)
+			return %self:distanceTo(spawner_data.spawn_pos) < 500;
 		end);
+
+		modkit.table.printTbl(spawner_map_data, self.own_group .. " metadata");
+
+		---@type Ship
+		local target_player_builder = modkit.table.find(GLOBAL_SHIPS:all(), function (ship)
+			print("check ship " .. ship.id);
+			print("dist: " .. ship:distanceTo(%spawner_map_data.target_player_spawn_pos));
+			return ship:alive() and ship:distanceTo(%spawner_map_data.target_player_spawn_pos) < 500;
+		end);
+
+		local target_player = target_player_builder.player;
+
+		self:print("tpi: " .. target_player.id);
+		if (target_player and target_player.id ~= -1) then
+			self:print("switch owner to " .. target_player.id .. " from " .. self.player.id .. "!");
+			self:print("player: " .. SobGroup_GetPlayerOwner(self.own_group));
+			SobGroup_SwitchOwner(self.own_group, target_player.id);
+			self:print("player: " .. SobGroup_GetPlayerOwner(self.own_group));
+		end
 	end
 
-	if (self:tick() == 10) then -- wait a second to let gamerule tidy up dead guys...
-		self:print("do player swap stuff");
-		-- dirty hack to resolve ownership issues of the second spawner in variable player games
-		if (self.player.id ~= 0) then
-			---@type Player
-			--- the lowest index teammate = ceil(total players / 2)
-			--- 2 -> 1, 4 -> 2, 6 -> 3
-			local target_player_index = ceil(modkit.table.length(GLOBAL_PLAYERS:alive()) / 2);
-			-- if p2 (third player) exists and is alive, swap ownership from p1 to them (its a 4 player game)
-			local pN = GLOBAL_PLAYERS:all()[target_player_index];
-			if (pN and pN:isAlive() == 1) then
-				self:print("switch owner to " .. pN.id .. " from " .. self.player.id .. "!");
-				SobGroup_SwitchOwner(self.own_group, pN.id);
+	if (self:tick() >= 120) then -- grace period
+		if (self.player.id ~= -1) then
+			self:visibility(VisFull);
+			if (mod(self:tick(), 30) == 0) then
+				self:print("spawning start");
+				local our_movers = GLOBAL_SHIPS:corvettes(function (ship)
+					%self:print(ship.own_group .. "is mover?");
+					if (ship.type_group == "mpp_mover" and %self.player.id == ship.player.id) then
+						%self:print("i think " .. ship.own_group .. " belongs to us and is a mover?");
+					end
+					return ship.type_group == "mpp_mover" and %self.player.id == ship.player.id;
+				end);
+				self:print("found " .. modkit.table.length(our_movers) .. " movers");
+				if (modkit.table.length(our_movers) < mpp_mover_spawner_proto.max_movers) then
+					self:spawnNewMover();
+				end
+				self:print("spawning end");
 			end
 		end
 	end
