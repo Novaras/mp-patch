@@ -183,12 +183,12 @@ function DetermChunk()
 	addSquadron("meg_veildebris_chunk_lighthouse", "meg_veildebris_chunk_lighthouse", {-62.0, -615.98, -8409.1}, -1, {5.16, -185.47, -89.96}, 0, 0)
 	addSquadron("mpp_dreadnaught.001", "mpp_dreadnaught", {0.0, 0.0, 6317.0}, -1, {0.0, -180.0, -0.0}, 0, 0)
 
-	addPoint("StartPos0", {11963.0, 0.0, 8000.0}, {0.0, -125.0, -0.0})
-	addSquadron("mover-spawner-debris", "mpp_mover_spawner", { 11000, 0, 3000 }, 0, { 0, 0, 0 }, 0, 0);
+	addPoint("StartPos0", MAP_METADATA.spawners[0].target_player_spawn_pos, {0.0, -125.0, -0.0})
+	addSquadron("mover-spawner-debris", "mpp_mover_spawner", MAP_METADATA.spawners[0].spawn_pos, -1, { 0, 0, 0 }, 0, 0);
 	addPoint("StartPos1", {13063.0, 0.0, -3000.0}, {0.0, -75.0, 0.0})
 
-	addPoint("StartPos2", {-11963.0, 0.0, 8000.0}, {0.0, 125.0, -0.0})
-	addSquadron("mover-spawner-debris", "mpp_mover_spawner", { -11000, 0, 3000 }, 1, { 0, 0, 0 }, 0, 0);
+	addPoint("StartPos2", MAP_METADATA.spawners[1].target_player_spawn_pos, {0.0, 125.0, -0.0})
+	addSquadron("mover-spawner-debris", "mpp_mover_spawner", MAP_METADATA.spawners[1].spawn_pos, -1, { 0, 0, 0 }, 0, 0);
 	addPoint("StartPos3", {-13063.0, 0.0, -3000.0}, {0.0, 75.0, 0.0})
 
 	addPoint("StartPos4", {5063.0, 31167.0, -0.0}, {0.0, -90.0, 0.0})
@@ -201,6 +201,19 @@ function DetermChunk()
 	addSquadron("vgr_hyperspace_platform.004", "vgr_hyperspace_platform", {8008.55, 0.0, 21513.25}, -1, {0.0, 0.0, 0.0}, 0, 0)
 	setWorldBoundsInner({0.00, 0.00, 0.00}, {30000, 20000, 30000})
 end
+
+MAP_METADATA = {
+	spawners = {
+		[0] = {
+			spawn_pos = { 11000, 0, 3000 },
+			target_player_spawn_pos = {11963.0, 0.0, 8000.0}
+		},
+		[1] = {
+			spawn_pos = { -11000, 0, 3000 },
+			target_player_spawn_pos = {-11963.0, 0.0, 8000.0}
+		}
+	}
+};
 
 function NonDetermChunk()
 	addPebble("pebble_1", {0.75, 0.0, 19999.99}, 0, 0, 0)
