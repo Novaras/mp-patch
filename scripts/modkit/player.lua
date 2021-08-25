@@ -167,6 +167,7 @@ if (modkit_player_proto == nil) then
 	--- When this function is called, if there is team containing this player or an ally of this player,
 	--- then a new team is created for it. If there is a team with only allies, this player is added to the team.
 	---@return table
+	---@deprecated
 	function modkit_player_proto:team()
 		local team = GLOBAL_TEAMS:find(function (team)
 			local only_allies = 1;
