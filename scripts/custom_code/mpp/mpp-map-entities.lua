@@ -58,7 +58,6 @@ function mpp_dreadnaught_proto:stunAndRepairIfCritical()
 			self:invulnerable(0);
 			self:stunned(0);
 			self:tumble(0);
-			modkit.scheduler:clear(event.id);
 			self:print("done, stop healing");
 		end
 	end
