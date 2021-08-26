@@ -7,7 +7,7 @@ NewShipType.regentime=0
 NewShipType.minRegenTime=0
 NewShipType.sideArmourDamage = getShipNum(NewShipType, "sideArmourDamage", 1.0)
 NewShipType.rearArmourDamage = getShipNum(NewShipType, "rearArmourDamage", 1.0)
-setTacticsMults(NewShipType, "MAXSPEED", 0.90, 1.10, 1.0)
+setTacticsMults(NewShipType, "MAXSPEED", 1.0, 1.10, 1.0)
 setTacticsMults(NewShipType, "ENGINEACCEL", 1.20, 0.80, 1.0)
 setTacticsMults(NewShipType, "ENGINEBRAKE", 1.0, 1.0, 1.0)
 setTacticsMults(NewShipType, "THRUSTER", 1.0, 1.0, 1.0)
@@ -25,12 +25,12 @@ NewShipType.defaultStance="Neutral"
 NewShipType.holdSlots=1
 NewShipType.mass=15
 NewShipType.collisionMultiplier=0.4
-NewShipType.thrusterMaxSpeed=230
-NewShipType.mainEngineMaxSpeed=230
+NewShipType.thrusterMaxSpeed=240
+NewShipType.mainEngineMaxSpeed=240
 NewShipType.rotationMaxSpeed=131
 NewShipType.thrusterAccelTime=1
 NewShipType.thrusterBrakeTime=1
-NewShipType.mainEngineAccelTime=3
+NewShipType.mainEngineAccelTime=2.5
 NewShipType.mainEngineBrakeTime=1
 NewShipType.rotationAccelTime=0.2
 NewShipType.rotationBrakeTime=0.2
@@ -93,7 +93,7 @@ NewShipType.antiCorvetteValue=0
 NewShipType.antiFrigateValue=0
 NewShipType.totalValue=5
 NewShipType.buildCost=600
-NewShipType.buildTime=45
+NewShipType.buildTime=40
 NewShipType.buildPriorityOrder=10
 NewShipType.retaliationRange=5500
 NewShipType.retaliationDistanceFromGoal=160
@@ -164,8 +164,8 @@ addAbility(NewShipType,"CanAttack",1,1,0,0,0.35,0.90,"Fighter, Fighter_hw1, Corv
 {Frigate="flyround_CommandVette"});
 LoadModel(NewShipType,1);
 addShield(NewShipType,"EMP",110,20);
-AddShipMultiplier(NewShipType,"WeaponAccuracy","OwnShipsWithinRadiusExcludingThisShip","Linear",1.07,1.07,2200);
-AddShipMultiplier(NewShipType,"WeaponDamage","OwnShipsWithinRadiusExcludingThisShip","Linear",1.07,1.07,2200);
+AddShipMultiplier(NewShipType,"WeaponAccuracy","OwnShipsWithinRadiusExcludingThisShip","Linear",1.07,1.07,2400);
+AddShipMultiplier(NewShipType,"WeaponDamage","OwnShipsWithinRadiusExcludingThisShip","Linear",1.07,1.07,2400);
 StartShipWeaponConfig(NewShipType,"Vgr_CommandGun","Weapon_Gun","")
 NewShipType.battleScarCoverage=1
 NewShipType.battleScarBudgetLow = 400
