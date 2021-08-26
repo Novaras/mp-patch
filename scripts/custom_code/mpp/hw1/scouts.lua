@@ -74,7 +74,6 @@ end
 
 function hw1_scouts_proto:finish()
 	self.current_speed = self:speed(1);
-	modkit.scheduler:clear(self.decay_event_id);
 end
 
 modkit.compose:addShipProto("kus_scout", hw1_scouts_proto);
