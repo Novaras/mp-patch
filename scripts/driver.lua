@@ -24,14 +24,8 @@ if (H_DRIVER == nil) then
 	---@return Ship[]
 	function GLOBAL_SHIPS:allied(caller, filter_predicate)
 		local allied_ships = {};
-		local collection;
-		if (filter_predicate) then
-			collection = self:filter(filter_predicate);
-		else
-			collection = self:all();
-		end
-		for index, ship in collection do
-			if (ship:alliedWith(caller)) then
+		for index, ship in self:all() do
+			if (ship:alliedWith(caller) and filter_predicate(ship)) then
 				allied_ships[index] = ship;
 			end
 		end
@@ -45,13 +39,8 @@ if (H_DRIVER == nil) then
 	---@return Ship[]
 	function GLOBAL_SHIPS:enemies(caller, filter_predicate)
 		local enemy_ships = {};
-		if (filter_predicate) then
-			collection = self:filter(filter_predicate);
-		else
-			collection = self:all();
-		end
-		for index, ship in collection do
-			if (ship:alliedWith(caller) == nil) then
+		for index, ship in self:all() do
+			if (ship:alliedWith(caller) == nil and filter_predicate(ship)) then
 				enemy_ships[index] = ship;
 			end
 		end
