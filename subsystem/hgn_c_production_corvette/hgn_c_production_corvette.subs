@@ -8,7 +8,7 @@ NewSubSystemType.tacticalIconMaxFadeSize=0.008
 NewSubSystemType.groupMergeSize=0.001
 NewSubSystemType.mouseOverMinFadeSize=0.045
 NewSubSystemType.mouseOverMaxFadeSize=0.1
-NewSubSystemType.maxhealth=25000
+NewSubSystemType.maxhealth=27500
 NewSubSystemType.regentime=250
 NewSubSystemType.nlips=0
 NewSubSystemType.nlipsRange=0
@@ -25,7 +25,7 @@ NewSubSystemType.collateralDamage=100
 NewSubSystemType.inactiveTimeAfterDamage=10
 NewSubSystemType.activateHealthPercentage=0.1
 NewSubSystemType.costToBuild=800
-NewSubSystemType.timeToBuild=60
+NewSubSystemType.timeToBuild=55
 NewSubSystemType.isResearch=0
 NewSubSystemType.visible=1
 LoadHODFile(NewSubSystemType,1);
