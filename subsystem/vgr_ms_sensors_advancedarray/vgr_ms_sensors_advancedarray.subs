@@ -36,7 +36,7 @@ NewSubSystemType.DockFamily="CantDock"
 NewSubSystemType.DisplayFamily="SubSystemSensors"
 NewSubSystemType.ArmourFamily="SubSystemArmour"
 NewSubSystemType.sobDieTime=1
-AddSubSystemMultiplier(NewSubSystemType,"PrimarySensorsRange","ThisShipOnly","Linear",1,1.5,0);
-AddSubSystemMultiplier(NewSubSystemType,"SecondarySensorsRange","ThisShipOnly","Linear",1,1.5,0);
+AddSubSystemMultiplier(NewSubSystemType,"PrimarySensorsRange","ThisShipOnly","Linear",1.6,1.6,0);
+AddSubSystemMultiplier(NewSubSystemType,"SecondarySensorsRange","ThisShipOnly","Linear",1.6,1.6,0);
 loadShipPatchList(NewSubSystemType,"data:sound/sfx/ship/Vaygr/Subsystems/"
                              ,1,"VASubsystemSensorsAmb");

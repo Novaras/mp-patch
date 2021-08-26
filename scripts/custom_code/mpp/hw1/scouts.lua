@@ -43,7 +43,7 @@ modkit.compose:addShipProto("vgr_scout", scouts_proto);
 hw1_scouts_proto = {
 	boost_range = {
 		min = 1.1,
-		max = 3.5
+		max = 3.7
 	},
 	attribs = function ()
 		return {
@@ -65,7 +65,7 @@ function hw1_scouts_proto:start()
 end
 
 function hw1_scouts_proto:go()
-	if (mod(self:tick(), 3) == 0) then
+	if (mod(self:tick(), 1) == 0) then
 		if (self.current_speed > self.boost_range.min) then
 			self.current_speed = self:speed(max(self.current_speed - 0.5, self.boost_range.min));
 		end
