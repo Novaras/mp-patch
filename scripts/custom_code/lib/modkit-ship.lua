@@ -53,6 +53,7 @@ function modkit_ship:HP(hp)
 	return SobGroup_GetHealth(self.own_group);
 end
 
+---@return bool
 function modkit_ship:alive()
 	return self:count() > 0 and self:HP() > 0;
 end
