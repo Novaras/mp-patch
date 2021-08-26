@@ -58,7 +58,7 @@ end
 ---
 ---@return Ship[]
 function gravwell_proto:calculateNewTrappables()
-	return GLOBAL_SHIPS:strike(function (ship)
+	return GLOBAL_SHIPS:enemies(self, function (ship)
 		return ship:alive() and ship:isSalvager() == nil and ship:distanceTo(%self) < %self.effect_range;
 	end);
 end
@@ -184,9 +184,12 @@ function gravwell_proto:start()
 end
 
 function gravwell_proto:go()
+	self:print("hi");
 	local new_trappables = self:calculateNewTrappables(); -- calculate which ships to stun this pass
+	self:print("new trappables: " .. modkit.table.length(new_trappables));
 	self:setTrapped(new_trappables, 1); -- stun them
 	local difference_from_last = modkit.table.difference(self.previous_tick_trapped, new_trappables); -- any from last who didnt pass this time = diff to unstun
+	self:print("diff from last: " .. modkit.table.length(difference_from_last));
 	self:setTrapped(difference_from_last, 0); -- unstun ships from last time which are not in our current batch to stun
 	self:ownEffects(1);
 	self:rememberUniqueTrapped(new_trappables); -- record any new ships we havent recorded interacting with yet (used for cleanup)
