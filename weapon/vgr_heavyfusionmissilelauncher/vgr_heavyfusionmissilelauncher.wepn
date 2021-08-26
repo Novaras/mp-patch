@@ -11,7 +11,11 @@ setPenetration(NewWeaponType,35,1,
 {SubSystemArmour=0.2},
 {MediumArmour=1.0},
 {SuperUtilityArmour = 1.0},
-{resarmour=0.2});
+{resarmour=0.2},
+{Unarmoured=0.01},
+{Unarmoured_hw1=0.01},
+{LightArmour=0.05},
+{LightArmour_hw1=0.05});
 setAccuracy(NewWeaponType,1,
 {Swarmer=0.01},
 {SpaceMine=0.01},
