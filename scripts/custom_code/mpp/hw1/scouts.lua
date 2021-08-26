@@ -42,8 +42,8 @@ modkit.compose:addShipProto("vgr_scout", scouts_proto);
 --- Specifically for hw1 scouts
 hw1_scouts_proto = {
 	boost_range = {
-		min = 1.05,
-		max = 4
+		min = 1.1,
+		max = 3.5
 	},
 	attribs = function ()
 		return {
