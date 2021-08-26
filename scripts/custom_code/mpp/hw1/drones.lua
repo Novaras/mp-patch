@@ -58,10 +58,9 @@ end
 
 --- Returns `nil` if the frigate is not 'ready', meaning it is not capable of fighting with drones.
 ---
----@return '1'|'nil'
+---@return bool
 function drones_proto:frigateReady()
-	return self:isDoingAbility(AB_Hyperspace) == 0
-		and self:allInRealSpace() == 1
+	return self:allInRealSpace() == 1
 		and self:beingCaptured() == 0
 		and self:isDoingAnyAbilities({
 			AB_Hyperspace,
@@ -120,10 +119,10 @@ end
 function drones_proto:addProducedDronesToList()
 	-- print("[" .. Universe_GameTime() .. "] hi from drone collation run for " .. self.own_group);
 
-	-- print("new_drones? " .. modkit.table.length(self.new_drones));
+	-- self:print("new_drones? " .. modkit.table.length(self.new_drones));
 
 	if (modkit.table.length(self.new_drones) > 0) then
-		local our_docked_drones = GLOBAL_SHIPS:drones(function (ship)
+		local our_docked_drones = GLOBAL_SHIPS:allied(self, function (ship)
 			return ship:docked(%self);
 		end);
 		-- print("begin assigning new drones...");
@@ -206,11 +205,14 @@ end
 -- === hooks ===
 
 function drones_proto:update()
-	if (self:tick() == 1) then
+	if (self:tick() > 1 and self:autoLaunch() == 0) then
+		self:print("autolaunching");
 		self:autoLaunch(ShipHoldStayDockedAlways);
 	end
 	if (self:tick() >= 3) then -- some time to undock
+		-- self:print("update tick, ready?: " .. (self:frigateReady() or "nil"));
 		if (self:frigateReady()) then
+			-- self:print("main run");
 			self:pruneDeadDrones();
 			self:addProducedDronesToList();
 			self:launchDrones();
@@ -224,6 +226,7 @@ function drones_proto:update()
 				self:produceMissingDrones();
 			end
 		else
+			self:print("kill run");
 			self:killDrones();
 		end
 	end
@@ -267,11 +270,14 @@ drone_proto = {
 ---
 ---@param frigate drones_proto
 function drone_proto:link(frigate)
+	if (frigate) then
+		self:print("link with " .. frigate.own_group);
+	end
 	self.frigate = frigate;
 end
 
 function drone_proto:update()
-	if (self:tick() > 2) then
+	if (self:tick() > 6) then
 		if (self.frigate == nil or self.frigate:alive() == nil) then
 			self:spawn(0);
 			self:die();

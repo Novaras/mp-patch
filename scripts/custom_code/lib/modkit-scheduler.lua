@@ -5,6 +5,16 @@
 ---@class modkit_scheduler_proto : Ship, SchedulerAttribs
 modkit_scheduler_proto = {
 	update_globals_interval = 5, -- .5 seconds
+
+	---@alias ShipFilterPredicate fun(ship: Ship): bool
+	---@alias FilterFn fun(predicate: ShipFilterPredicate): Ship[]
+
+	---@class SheduledFilters
+	---@field corvettes FilterFn
+	---@field drones FilterFn
+	---@field strike FilterFn
+	---@field builders FilterFn
+
 	filters = {
 		builders = function (ship)
 			return ship:canBuild();
@@ -50,16 +60,22 @@ function modkit_scheduler_proto:beginGlobalLists()
 
 	for collection, _ in modkit_scheduler_proto.filters do
 		GLOBAL_SHIPS.cache[collection] = {};
+		-- present the collection fn on GLOBAL_SHIPS i.e :corvettes() to get all vettes, allow for a filter pred to be passed:
 		GLOBAL_SHIPS[collection] = function (self, filter_predicate)
 			-- print("cached " .. %collection .. ": " .. modkit.table.length(self.cache[%collection]));
-			-- print("all drones: " .. modkit.table.length(self:filter(function (ship)
-			-- 	return ship:isDrone();
-			-- end)))
-			if (filter_predicate) then
-				-- print("filtered: " .. modkit.table.length(modkit.table.filter(self.cache[%collection], filter_predicate)));
-				return modkit.table.filter(self.cache[%collection], filter_predicate);
+			local out = {};
+			for id, ship in self.cache[%collection] do
+				self.cache[%collection][id] = GLOBAL_SHIPS:get(ship.id); -- during fetches, we also sync the cache
+
+				if (filter_predicate) then
+					if (filter_predicate(ship)) then
+						out[id] = ship;
+					end
+				else
+					out[id] = ship;
+				end
 			end
-			return self.cache[%collection];
+			return out;
 		end
 	end
 
