@@ -38,8 +38,6 @@ function base_prodship_proto:ensureSingleResShipQueued()
 		local isOurBuilder = function (ship)
 			return (ship.player.id == %self.player.id) and ship:canBuild() and ship.id ~= %self.id;
 		end
-		modkit.scheduler:every(500, function ()
-		end);
 		local our_builders = GLOBAL_SHIPS:filter(isOurBuilder); -- all our build capable ships
 		for i = 0, 5, 1 do
 			res_ship_name = self:race() .. "_researchship"; -- kus_researchship, tai_researchship
