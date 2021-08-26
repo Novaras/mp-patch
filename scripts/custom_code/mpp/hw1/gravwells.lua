@@ -44,6 +44,22 @@ gravwell_proto = {
 	end
 };
 
+--- Returns whether this `ship` is a valid stun target.
+---
+---@param ship Ship
+---@return bool
+function gravwell_proto:shipIsStunnable(ship)
+	return
+		ship:alive() 							-- alive, and:
+		and (
+			ship:isFighter() == 1 				-- either a fighter or
+			or (								-- a corvette that isn't a salvager
+				ship:isCorvette() == 1
+				and ship:isSalvager() == nil
+			)
+		)
+		and ship:distanceTo(self) < gravwell_proto.effect_range; -- and in range
+end
 
 function gravwell_proto:nextTumble()
 	local tumble = self.random_tumbles[self.tumble_index];
@@ -59,7 +75,7 @@ end
 ---@return Ship[]
 function gravwell_proto:calculateNewTrappables()
 	return GLOBAL_SHIPS:enemies(self, function (ship)
-		return ship:alive() and ship:isSalvager() == nil and ship:distanceTo(%self) < %self.effect_range;
+		return %self:shipIsStunnable(ship);
 	end);
 end
 
@@ -116,45 +132,32 @@ end
 --- Stuff that only AI-controlled gravwells should do.
 --- Causes the gravwell to automatically activate under certain conditions.
 function gravwell_proto:AIOnly()
-	if (self.player:isHuman() == nil) then
-		local trappables = self:calculateNewTrappables();
-		local friendlies = modkit.table.filter(trappables, function (ship)
-			return ship.player:alliedWith(%self.player);
-		end);
-		local enemies = modkit.table.filter(trappables, function (ship)
-			return ship.player:alliedWith(%self.player) == nil;
-		end);
+	if (self.player:isHuman() == nil and mod(self:tick(), 3) == 0) then
+		local friendlies_value = 0;
+		local enemies_value = 0;
+		for _, ship in GLOBAL_SHIPS:all() do
+			if (self:shipIsStunnable(ship)) then
+				if (ship:alliedWith(self)) then
+					friendlies_value = friendlies_value + ship:buildCost();
+				else
+					enemies_value = enemies_value + ship:buildCost();
+				end
+			end
+		end
 
-		if (modkit.table.length(enemies) > 0) then
-			-- ru value totals of friendlies and enemies
-			local friendlies_value = modkit.table.reduce(friendlies, function (acc, ship)
-				return acc + ship:buildCost();
-			end, 0);
-			local enemies_value = modkit.table.reduce(enemies, function (acc, ship)
-				return acc + ship:buildCost();
-			end, 0);
-
+		if (enemies_value > 0) then
 			-- if any condition here passes, ability will activate
 			local activation_conditions = {
 				-- trappable enemies value >= 20% more than friendlies value
 				good_value = function ()
 					return %enemies_value >= 1.2 * %friendlies_value;
-				end,
-				-- if nearby two or more collectors (simulating collectors are under threat or attack)
-				near_our_collectors = function ()
-					local outer_self = %self;
-					local our_nearby_collectors = GLOBAL_SHIPS:filter(function (ship)
-						return ship.player.id == %outer_self.player.id
-							and ship:isResourceCollector()
-							and %outer_self:distanceTo(ship) < %outer_self.effect_range * 1.1;
-					end);
-					return modkit.table.length(our_nearby_collectors) > 2; -- enemies being present is already a given
 				end
 			};
 
 			local none_passed = 1;
 			for name, condition in activation_conditions do
 				if (condition() ~= nil) then -- passed
+					self:print("AI gravwell passed condition " .. name .. "! Activate the grav!");
 					none_passed = nil;
 					if (self.active == 0) then
 						self:customCommand();
@@ -163,6 +166,7 @@ function gravwell_proto:AIOnly()
 				end
 			end
 			if (none_passed and self.active == 1) then
+				self:print("AI gravwell failed all conditions, disable the well");
 				self:customCommand();
 			end
 		end

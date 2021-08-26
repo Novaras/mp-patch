@@ -58,7 +58,7 @@ if (modkit_player_proto == nil) then
 
 	--- Gets the player's ships (alive ships)
 	function modkit_player_proto:ships()
-		return GLOBAL_SHIPS:find(function (ship)
+		return GLOBAL_SHIPS:allied(function (ship)
 			return ship.player.id == %self.id;
 		end);
 	end
